@@ -1,113 +1,74 @@
 <x-admin-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
+            Categories
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Tombol Tambah Kategori -->
-            <div class="flex justify-end m-2 p-2">
-                <a 
-                    href="{{ route('admin.categories.create') }}" 
-                    class="px-4 py-2 bg-indigo-500 hover:bg-indigo-700 rounded-lg text-white">
-                    New Category
+    <div class="py-10">
+        <div class="max-w-6xl mx-auto space-y-6">
+
+            <!-- Add Category Button -->
+            <div class="flex justify-end">
+                <a href="{{ route('admin.categories.create') }}"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow">
+                    + Add Category
                 </a>
             </div>
 
-            <!-- Tabel Kategori -->
-            <div class="flex flex-col">
-                <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div class="inline-block py-2 min-w-full sm:px-6 lg:px-8">
-                        <div class="overflow-hidden shadow-md sm:rounded-lg">
-                            <table class="min-w-full">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th 
-                                            scope="col" 
-                                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
-                                        >
-                                            Name
-                                        </th>
-                                        <th 
-                                            scope="col" 
-                                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
-                                        >
-                                            Image
-                                        </th>
-                                        <th 
-                                            scope="col" 
-                                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
-                                        >
-                                            Description
-                                        </th>
-                                        <th 
-                                            scope="col" 
-                                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
-                                        >
-                                            Actions
-                                        </th>
-                                    </tr>
-                                </thead>
+            <!-- Category List -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @forelse ($categories as $category)
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
 
-                                <tbody>
-                                    @foreach ($categories as $category)
-                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                {{ $category->name }}
-                                            </td>
+                        <!-- Image -->
+                        <img src="{{ Storage::url($category->image) }}"
+                            class="w-full h-40 object-cover">
 
-                                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                <img 
-                                                    src="{{ Storage::url($category->image) }}" 
-                                                    class="w-16 h-16 rounded object-cover"
-                                                >
-                                            </td>
+                        <div class="p-5 space-y-3">
 
-                                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                {{ $category->description }}
-                                            </td>
+                            <!-- Name -->
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                {{ $category->name }}
+                            </h3>
 
-                                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                <div class="flex space-x-2">
-                                                    <a 
-                                                        href="{{ route('admin.categories.edit', $category->id) }}" 
-                                                        class="px-4 py-2 bg-green-500 hover:bg-green-700 rounded-lg text-white"
-                                                    >
-                                                        Edit
-                                                    </a>
+                            <!-- Description -->
+                            <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
+                                {{ $category->description }}
+                            </p>
 
-                                                    <form 
-                                                        method="POST" 
-                                                        action="{{ route('admin.categories.destroy', $category->id) }}"
-                                                        onsubmit="return confirm('Are you sure?');"
-                                                    >
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button 
-                                                            type="submit" 
-                                                            class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded-lg text-white"
-                                                        >
-                                                            Delete
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                            <!-- Actions -->
+                            <div class="flex items-center gap-3 pt-3">
 
-                            @if ($categories->isEmpty())
-                                <div class="text-center py-6 text-gray-500 dark:text-gray-400">
-                                    No categories found.
-                                </div>
-                            @endif
+                                <a href="{{ route('admin.categories.edit', $category->id) }}"
+                                    class="flex-1 text-center px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg">
+                                    Edit
+                                </a>
+
+                                <form method="POST" action="{{ route('admin.categories.destroy', $category->id) }}"
+                                    class="flex-1"
+                                    onsubmit="return confirm('Are you sure you want to delete this category?');">
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit"
+                                        class="w-full px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+
                         </div>
                     </div>
-                </div>
+
+                @empty
+                    <div class="col-span-3 text-center text-gray-500 dark:text-gray-400 py-10">
+                        No categories found.
+                    </div>
+                @endforelse
             </div>
+
         </div>
     </div>
 </x-admin-layout>
