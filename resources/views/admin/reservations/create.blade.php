@@ -57,19 +57,6 @@
                             class="mt-1 w-full rounded-lg bg-gray-800 border border-gray-700 text-gray-200 px-4 py-2">
                     </div>
 
-                    <!-- Table -->
-                    <div>
-                        <label class="text-sm font-semibold text-gray-300">Table</label>
-                        <select name="table_id"
-                            class="mt-1 w-full rounded-lg bg-gray-800 border border-gray-700 text-gray-200 px-4 py-2">
-                            @foreach($tables as $table)
-                                <option value="{{ $table->id }}">
-                                    {{ $table->name }} ({{ $table->guest_number }} Guests)
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
                     <button type="submit"
                         class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow">
                         Submit

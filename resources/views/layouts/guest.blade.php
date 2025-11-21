@@ -44,11 +44,6 @@
                     Home
                     </a>
         
-                    <a href="{{ route('categories.index') }}" 
-                    class="text-[#3A3A3A] hover:text-[#C9A35A] transition duration-200">
-                    Categories
-                    </a>
-        
                     <a href="{{ route('menus.index') }}" 
                     class="text-[#3A3A3A] hover:text-[#C9A35A] transition duration-200">
                     Our Menu

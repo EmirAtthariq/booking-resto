@@ -33,11 +33,6 @@
             <!-- Nav -->
             <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
 
-                <x-admin-nav-link :href="route('admin.categories.index')"
-                    :active="request()->routeIs('admin.categories.index')">
-                    📁 Categories
-                </x-admin-nav-link>
-
                 <x-admin-nav-link :href="route('admin.menus.index')"
                     :active="request()->routeIs('admin.menus.index')">
                     🍽️ Menus
@@ -82,54 +77,6 @@
                 </div>
             </div>
 
-        </aside>
-
-        <!-- MOBILE SIDEBAR BUTTON -->
-        <button 
-            @click="open = true" 
-            class="md:hidden fixed top-4 left-4 z-50 bg-gray-800 p-2 rounded-lg shadow-lg"
-        >
-            <svg fill="none" stroke="currentColor" class="w-6 h-6" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                    d="M4 6h16M4 12h16M4 18h16"/>
-            </svg>
-        </button>
-
-        <!-- MOBILE SIDEBAR OVERLAY -->
-        <div 
-            x-show="open"
-            class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden"
-            @click="open = false"
-        ></div>
-
-        <!-- MOBILE SIDEBAR CONTENT -->
-        <aside 
-            x-show="open"
-            class="fixed z-50 top-0 left-0 w-64 h-full bg-gray-900 border-r border-gray-700 p-6 md:hidden"
-        >
-            <h1 class="text-xl font-bold text-indigo-400 mb-6">Admin Panel</h1>
-
-            <nav class="space-y-1">
-                <x-admin-nav-link :href="route('admin.categories.index')"
-                    :active="request()->routeIs('admin.categories.index')">
-                    Categories
-                </x-admin-nav-link>
-
-                <x-admin-nav-link :href="route('admin.menus.index')"
-                    :active="request()->routeIs('admin.menus.index')">
-                    Menus
-                </x-admin-nav-link>
-
-                <x-admin-nav-link :href="route('admin.tables.index')"
-                    :active="request()->routeIs('admin.tables.index')">
-                    Tables
-                </x-admin-nav-link>
-
-                <x-admin-nav-link :href="route('admin.reservations.index')"
-                    :active="request()->routeIs('admin.reservations.index')">
-                    Reservations
-                </x-admin-nav-link>
-            </nav>
         </aside>
 
         <!-- MAIN CONTENT -->

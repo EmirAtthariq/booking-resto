@@ -43,10 +43,6 @@ class MenuController extends Controller
             'price' => $request->price
         ]);
 
-        if ($request->has('categories')){
-            $menu->categories()->attach($request->categories);
-        }
-
         return to_route('admin.menus.index')->with('success','Category Created Successfully');
     }
 
@@ -90,10 +86,6 @@ class MenuController extends Controller
             'price' => $request->price
         ]);
 
-        if ($request->has('categories')){
-            $menu->categories()->sync($request->categories);
-        }
-
         return to_route('admin.menus.index')->with('success','Category Updated Successfully');
     }
 
@@ -102,7 +94,6 @@ class MenuController extends Controller
      */
     public function destroy(Menu $menu)
     {
-    $menu->categories()->detach();
     Storage::delete($menu->image);
     $menu->delete();    
     return to_route('admin.menus.index')->with('danger','Category Deleted Successfully');
