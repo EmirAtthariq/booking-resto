@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\MenuStoreRequest;
 use App\Models\Menu;
+use App\Models\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Storage;
@@ -13,18 +14,47 @@ class MenuController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $menus = Menu::all();
-        return view('admin.menus.index', compact('menus'));
-    }
+        $categories = Category::all();
 
+        $menusQuery = Menu::with('category');
+
+        // FILTER KATEGORI (Parent maupun Child)
+        if ($request->category_id) {
+
+            $selectedCategory = Category::find($request->category_id);
+
+            if ($selectedCategory->parent_id === null) {
+                // Jika kategori adalah Parent → tampilkan semua anak
+                $childIds = Category::where('parent_id', $selectedCategory->id)->pluck('id');
+                $menusQuery->whereIn('category_id', $childIds);
+            } else {
+                // Jika kategori adalah Child → tampilkan sesuai ID
+                $menusQuery->where('category_id', $request->category_id);
+            }
+        }
+
+        // SORT
+        if ($request->sort === 'price_asc') {
+            $menusQuery->orderBy('price', 'asc');
+        } elseif ($request->sort === 'price_desc') {
+            $menusQuery->orderBy('price', 'desc');
+        }
+
+        $menus = $menusQuery->get();
+
+        $groupedMenus = $menus->groupBy(fn($m) => optional($m->category)->name ?? 'Uncategorized');
+
+        return view('admin.menus.index', compact('categories', 'groupedMenus'));
+    }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('admin.menus.create');
+        $categories = Category::whereNotNull('parent_id')->get(); // hanya sub kategori
+        return view('admin.menus.create', compact('categories'));
     }
 
     /**
@@ -38,7 +68,8 @@ class MenuController extends Controller
             'name' => $request->name,  
             'description' => $request->description,
             'image' => $image,
-            'price' => $request->price
+            'price' => $request->price,
+            'category_id' => $request->category_id,
         ]);
 
         return to_route('admin.menus.index')->with('success','Menu Created Successfully');
@@ -49,9 +80,10 @@ class MenuController extends Controller
      */
     public function edit(Menu $menu)
     {
-        return view('admin.menus.edit', compact('menu'));
+        $categories = Category::whereNotNull('parent_id')->get(); // hanya sub kategori
+        return view('admin.menus.edit', compact('menu', 'categories'));
     }
-
+    
     /**
      * Update the specified resource in storage.
      */
@@ -74,7 +106,8 @@ class MenuController extends Controller
             'name'=> $request->name,
             'image'=> $image,
             'description'=> $request->description,
-            'price' => $request->price
+            'price' => $request->price,
+            'category_id' => $request->category_id,
         ]);
 
         return to_route('admin.menus.index')->with('success','Menu Updated Successfully');

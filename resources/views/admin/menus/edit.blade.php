@@ -1,65 +1,84 @@
 <x-admin-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
+        <h2 class="text-2xl font-bold text-amber-200">Edit Menu</h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="flex m-2 p-2">
-                <a href="{{ route('admin.categories.index') }}"
-                    class="px-4 py-2 bg-indigo-500 hover:bg-indigo-700 rounded-lg text-white">Category Index</a>
-            </div>
-            <div class="m-2 p-2 bg-slate-100 rounded">
-                <div class="space-y-8 divide-y divide-gray-200 w-1/2 mt-10">
-                    <form method="POST" action="{{ route('admin.categories.update', $category->id) }}"
-                        enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        <div class="sm:col-span-6">
-                            <label for="name" class="block text-sm font-medium text-gray-700"> Name </label>
-                            <div class="mt-1">
-                                <input type="text" id="name" name="name" value="{{ $category->name }}"
-                                    class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
-                            </div>
-                            @error('name')
-                                <div class="text-sm text-red-400">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="sm:col-span-6">
-                            <label for="image" class="block text-sm font-medium text-gray-700"> Image </label>
-                            <div>
-                                <img class="w-32 h-32" src="{{ Storage::url($category->image) }}">
-                            </div>
-                            <div class="mt-1">
-                                <input type="file" id="image" name="image"
-                                    class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
-                            </div>
-                            @error('image')
-                                <div class="text-sm text-red-400">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="sm:col-span-6 pt-5">
-                            <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                            <div class="mt-1">
-                                <textarea id="description" rows="3" name="description"
-                                    class="shadow-sm focus:ring-indigo-500 appearance-none bg-white border py-2 px-3 text-base leading-normal transition duration-150 ease-in-out focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
-                                {{ $category->description }}
-                                </textarea>
-                            </div>
-                            @error('description')
-                                <div class="text-sm text-red-400">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mt-6 p-4">
-                            <button type="submit"
-                                class="px-4 py-2 bg-indigo-500 hover:bg-indigo-700 rounded-lg text-white">Update</button>
-                        </div>
-                    </form>
-                </div>
+    <div class="py-10">
+        <div class="max-w-3xl mx-auto">
+
+            <!-- Back -->
+            <a href="{{ route('admin.menus.index') }}"
+               class="inline-block mb-6 px-4 py-2 bg-amber-700 hover:bg-amber-800 text-white rounded-lg shadow-lg">
+                ← Back to Menu List
+            </a>
+
+            <div class="bg-[#3A2A1F] shadow-xl rounded-xl p-8 border border-[#6B4B32]">
+
+                <form method="POST"
+                      action="{{ route('admin.menus.update', $menu->id) }}"
+                      class="space-y-6" enctype="multipart/form-data">
+
+                    @csrf
+                    @method('PUT')
+
+                    <!-- Name -->
+                    <div>
+                        <label class="block text-sm font-semibold text-amber-200">Name</label>
+                        <input type="text" name="name"
+                               value="{{ old('name', $menu->name) }}"
+                               class="mt-1 w-full rounded-lg border-[#6B4B32] bg-[#4A3520] text-amber-100 px-3 py-2 font-semibold">
+                    </div>
+
+                    <!-- Price -->
+                    <div>
+                        <label class="block text-sm font-semibold text-amber-200">Price</label>
+                        <input type="number" name="price"
+                               value="{{ old('price', $menu->price) }}"
+                               class="mt-1 w-full rounded-lg border-[#6B4B32] bg-[#4A3520] text-amber-100 px-3 py-2 font-semibold">
+                    </div>
+
+                    <!-- Category -->
+                    <div>
+                        <label class="block text-sm font-semibold text-amber-200">Category</label>
+                        <select name="category_id"
+                                class="mt-1 w-full rounded-lg p-2 bg-[#4A3520] text-amber-100">
+
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    {{ $menu->category_id == $category->id ? 'selected' : '' }}>
+                                    {{ $category->parent->name }} - {{ $category->name }}
+                                </option>
+                            @endforeach
+
+                        </select>
+                    </div>
+
+                    <!-- Image -->
+                    <div>
+                        <label class="block text-sm font-semibold text-amber-200">Current Image</label>
+                        <img src="{{ Storage::url($menu->image) }}"
+                             class="w-32 h-32 rounded-lg mb-2 border border-[#6B4B32]">
+
+                        <input type="file" name="image"
+                               class="mt-1 w-full rounded-lg border-[#6B4B32] bg-[#4A3520] text-amber-100 px-3 py-2">
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <label class="block text-sm font-semibold text-amber-200">Description</label>
+                        <textarea name="description" rows="3"
+                                  class="w-full mt-1 rounded-lg border-[#6B4B32] bg-[#4A3520] text-amber-100 px-3 py-2">{{ old('description', $menu->description) }}</textarea>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit"
+                            class="w-full py-2 bg-amber-700 hover:bg-amber-800 text-white rounded-lg font-semibold shadow-lg">
+                        Update
+                    </button>
+                </form>
 
             </div>
+
         </div>
     </div>
 </x-admin-layout>

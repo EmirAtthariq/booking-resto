@@ -28,6 +28,8 @@ Route::middleware(['auth', 'admin'])->name('admin.')->prefix('admin')->group(fun
     Route::get('/', [AdminController::class, 'index'])->name('index');
     Route::resource('/menus', MenuController::class);
     Route::resource('/reservations', ReservationController::class);
+    Route::resource('/categories', \App\Http\Controllers\Admin\CategoryController::class);
+
 });
 
 Route::middleware('auth')->group(function () {

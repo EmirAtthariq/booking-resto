@@ -32,6 +32,13 @@
             <!-- Navigation -->
             <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
 
+                <x-admin-nav-link :href="route('admin.categories.index')"
+                    :active="request()->routeIs('admin.categories.index')"
+                    class="hover:bg-[#4A3F35]/40 rounded-lg text-[#FFF7E8]">
+                    📂 Categories
+                </x-admin-nav-link>
+
+
                 <x-admin-nav-link :href="route('admin.menus.index')"
                     :active="request()->routeIs('admin.menus.index')"
                     class="hover:bg-[#4A3F35]/40 rounded-lg text-[#FFF7E8]">

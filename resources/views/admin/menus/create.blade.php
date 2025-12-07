@@ -51,6 +51,20 @@
                         @error('description') <p class="text-red-400 text-sm">{{ $message }}</p> @enderror
                     </div>
 
+                    <div>
+                    <label class="block text-sm font-semibold text-amber-200">Category</label>
+                    <select name="category_id"
+                        class="mt-1 w-full rounded-lg bg-[#4A3520] text-amber-100 p-2">
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">
+                                {{ $category->parent->name }} - {{ $category->name }}
+                            </option>
+                        @endforeach
+
+                    </select>
+                    </div>
+
+
                     <button type="submit"
                         class="w-full py-2 bg-amber-700 hover:bg-amber-800 text-white rounded-lg font-semibold shadow-lg">
                         Submit
