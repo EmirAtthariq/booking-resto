@@ -76,7 +76,10 @@
 
                 <div class="flex justify-between mt-8">
                     <a href="{{ route('reservations.step.one') }}" 
-                       class="px-6 py-2 bg-gray-500 text-white rounded-md">
+                       class="px-6 py-2 text-white rounded-lg font-medium"
+                                style="background-color:#2f2f2f;"
+                                onmouseover="this.style.backgroundColor='#1f1f1f';"
+                                onmouseout="this.style.backgroundColor='#2f2f2f';">
                         Previous
                     </a>
 
